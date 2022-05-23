@@ -380,7 +380,7 @@ object ScalaParser {
     val path = java.nio.file.Paths.get(pathStr)
     val bytes = java.nio.file.Files.readAllBytes(path)
     val text = new String(bytes, "UTF-8")
-    val input = Input.VirtualFile(path.toString, text)
+    val input = dialects.Scala213Source3(Input.VirtualFile(path.toString, text))
 
     val tree = input.parse[Source].get
 
