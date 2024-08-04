@@ -289,19 +289,21 @@ impl CommandRunner {
             match response {
                 Ok(cached_response_opt) => match &cached_response_opt {
                     Some(cached_response) if cached_response.exit_code == 0 || failures_cached => {
-                        log::debug!(
-                            "remote cache hit for: {:?} digest={:?} response={:?}",
+                        log::info!(
+                            "remote cache hit for: {:?} action_digest={:?} response_digest={:?}\n {:?}",
                             request.description,
-                            action_digest,
-                            cached_response
+                            action_digest.hash.to_hex(),
+                            cached_response.output_directory.as_digest().hash.to_hex(),
+                            request
                         );
                         cached_response_opt
                     }
                     _ => {
-                        log::debug!(
-                            "remote cache miss for: {:?} digest={:?}",
+                        log::info!(
+                            "remote cache miss for: {:?} digest={:?}\n {:?}",
                             request.description,
-                            action_digest
+                            action_digest.hash.to_hex(),
+                            request
                         );
                         None
                     }
@@ -329,6 +331,13 @@ impl CommandRunner {
                 self.handle_cache_read_completed(workunit, cache_lookup_start, cache_result, local_execution_future).await
               }
               local_result = &mut local_execution_future => {
+                log::info!(
+                    "remote cache local completed first: {:?} digest={:?} response={:?}\n {:?}",
+                    request.description,
+                    action_digest.hash.to_hex(),
+                    local_result,
+                    request
+                );
                 workunit.increment_counter(Metric::RemoteCacheSpeculationLocalCompletedFirst, 1);
                 local_result.map(|res| (res, false))
               }

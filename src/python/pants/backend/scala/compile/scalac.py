@@ -50,6 +50,7 @@ from pants.jvm.strip_jar import strip_jar
 from pants.jvm.strip_jar.strip_jar import StripJarRequest
 from pants.jvm.subsystems import JvmSubsystem
 from pants.util.logging import LogLevel
+from pants.engine.process import ProcessCacheScope
 
 logger = logging.getLogger(__name__)
 
@@ -211,7 +212,7 @@ async def compile_scala_source(
             extra_nailgun_keys=extra_nailgun_keys,
             output_directories=(compilation_output_dir,),
             description=f"Compile {request.component} with scalac",
-            level=LogLevel.DEBUG,
+            level=LogLevel.INFO,
         ),
     )
     output: ClasspathEntry | None = None
@@ -240,6 +241,7 @@ async def compile_scala_source(
                 output_files=(output_file,),
                 description=f"Capture outputs of {request.component} for scalac",
                 level=LogLevel.TRACE,
+                cache_scope=ProcessCacheScope.LOCAL_SUCCESSFUL,
             ),
         )
         output_digest = jar_result.output_digest
