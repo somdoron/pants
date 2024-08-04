@@ -289,7 +289,7 @@ impl CommandRunner {
             match response {
                 Ok(cached_response_opt) => match &cached_response_opt {
                     Some(cached_response) if cached_response.exit_code == 0 || failures_cached => {
-                        log::info!(
+                        log::debug!(
                             "remote cache hit for: {:?} action_digest={:?} response_digest={:?}\n {:?}",
                             request.description,
                             action_digest.hash.to_hex(),
@@ -331,7 +331,7 @@ impl CommandRunner {
                 self.handle_cache_read_completed(workunit, cache_lookup_start, cache_result, local_execution_future).await
               }
               local_result = &mut local_execution_future => {
-                log::info!(
+                log::debug!(
                     "remote cache local completed first: {:?} digest={:?} response={:?}\n {:?}",
                     request.description,
                     action_digest.hash.to_hex(),
