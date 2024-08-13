@@ -318,7 +318,7 @@ impl CommandRunner {
         // We speculate between reading from the remote cache vs. running locally.
         in_workunit!(
       "remote_cache_read_speculation",
-      Level::Trace,
+      Level::Debug,
       user_metadata = vec![(
         "action_digest".to_owned(),        
         UserMetadataItem::String(format!("{action_digest:?}"))),
@@ -351,7 +351,7 @@ impl CommandRunner {
                                     .collect(),
                                 ..initial
                             },
-                            Level::Trace,
+                            Level::Debug,
                         )
                     })
                 });
@@ -421,7 +421,7 @@ impl CommandRunner {
                                 .collect(),
                             ..initial
                         },
-                        Level::Trace,
+                        Level::Debug,
                     )
                 })
             });

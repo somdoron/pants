@@ -40,13 +40,13 @@ class RemoteCacheLoggerCallback(WorkunitsCallback):
         finished: bool = False,
         **kwargs: Any,
     ) -> None:
-        for wu in completed_workunits:
-            if wu["name"] == "remote_cache_read_speculation":
+        for wu in completed_workunits:            
+            if wu["name"] == "remote_cache_read_speculation":                
                 self._completed_workunits[wu["span_id"]] = {
-                    "description": wu["metadata"]["user_metadata"]["request_description"],
-                    "action_digest": wu["metadata"]["user_metadata"]["action_digest"],
-                    "outcome": wu["metadata"]["user_metadata"]["outcome"],
-                    "request": wu["metadata"]["user_metadata"]["request"],
+                    "description": wu["metadata"]["request_description"],
+                    "action_digest": wu["metadata"]["action_digest"],
+                    "outcome": wu["metadata"]["outcome"],
+                    "request": wu["metadata"]["request"],
                 }
         if finished:
             filepath = f"{self.wulogger.logdir}/{context.run_tracker.run_id}.csv"
